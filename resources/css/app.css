@@ -1,0 +1,58 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+body {
+    background-color: #121212;
+    color: #f1f1f1;
+}
+
+.card, .list-group-item, .form-control, .form-check-input, .btn {
+    background-color: #1e1e1e;
+    color: #f1f1f1;
+    border-color: #333;
+}
+
+.form-control::placeholder {
+    color: #aaa;
+}
+
+.btn-primary {
+    background-color: #3f51b5;
+    border-color: #3f51b5;
+}
+
+.btn-primary:hover {
+    background-color: #5c6bc0;
+}
+
+.badge.bg-success {
+    background-color: #388e3c;
+}
+
+.badge.bg-secondary {
+    background-color: #757575;
+}
+
+
+.flatpickr-day.holiday-date {
+    background: #ffdddd !important;
+    color: #d00 !important;
+    border-radius: 50% !important;
+    position: relative;
+}
+.flatpickr-calendar {
+  z-index: 1200 !important; /* default 9999 kadang terlalu tinggi? */
+}
+
+.tooltip {
+  z-index: 9999 !important; /* pastikan tooltip di atas calendar */
+}
