@@ -16,6 +16,6 @@ Cheezy Todo App is a lightweight Laravel-based todo list application designed to
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/cheezy-todo-app.git
+   git clone https://github.com/bhak-ti/cheezy-todo-app.git
    cd cheezy-todo-app
 
