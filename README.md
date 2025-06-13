@@ -55,7 +55,7 @@ Cheezy Todo App is a lightweight Laravel-based todo list application designed to
 
 ## Technologies
 
-- Laravel 10
+- Laravel 12
 - Bootstrap 5
 - flatpickr
 - Axios
