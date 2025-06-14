@@ -206,9 +206,9 @@ document.head.insertAdjacentHTML('beforeend', `
 <style>
     .flatpickr-day.today-date {
         border-radius: 50% !important;
-        border: 2px solid #FFD966 !important;
+        border: 2px solid #0d6efd !important;
         background: transparent !important;
-        color: #FFD966 !important;
+        color: #0d6efd !important;
         font-weight: bold !important;
     }
 </style>
