@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Todosrec;
+use Carbon\Carbon;
 
 class TodosrecController extends Controller
 {
@@ -13,7 +14,14 @@ class TodosrecController extends Controller
 
     public function index()
     {
-        $todos = Todosrec::all(); // ambil semua todo
+        $todos = Todosrec::orderBy('TODODEADLINEDATE')
+            ->get()
+            ->groupBy(function ($item) {
+                return $item->TODODEADLINEDATE
+                    ? Carbon::parse($item->TODODEADLINEDATE)->format('Y-m-d')
+                    : 'Tanpa Deadline';
+            });
+
         return view('todos.index', compact('todos'));
     }
 

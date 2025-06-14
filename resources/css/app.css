@@ -56,3 +56,10 @@ body {
 .tooltip {
   z-index: 9999 !important; /* pastikan tooltip di atas calendar */
 }
+.todo-row.striped {
+    background-color: #2c3035 !important;
+}
+.todo-row:hover {
+    background-color: #343a40 !important;
+    transition: background 0.2s;
+}

@@ -15,45 +15,74 @@
     @endif
 
     @if ($todos->isEmpty())
-        <div class="alert alert-info">Belum ada todo. Yuk buat satu!</div>
+    <div class="alert alert-info">Belum ada todo. Yuk buat satu!</div>
     @else
         <ul class="list-group bg-dark rounded-3 shadow-sm">
-            @foreach ($todos as $todo)
-                <li class="list-group-item d-flex justify-content-between align-items-center"
-                    style="background-color: #23272b; color: #f8f9fa; border: 1px solid #343a40;">
-                    
-                    {{-- Detail todo --}}
-                    <div>
-                        <strong>{{ $todo->TODODESC }}</strong>
-
-                        <div class="small" style="color: #ccc;">
-                            Deadline: {{ \Carbon\Carbon::parse($todo->TODODEADLINEDATE)->format('d M Y H:i') }}
-                        </div>
-
-                        <div class="small" style="color: #ccc;">
-                            Finish: {{ $todo->TODOFINISHTIMESTAMP ? \Carbon\Carbon::parse($todo->TODOFINISHTIMESTAMP)->format('d M Y H:i') : '-' }}
-                        </div>
-
-                        <div class="small" style="color: #ccc;">
-                            Dibuat: {{ \Carbon\Carbon::parse($todo->created_at)->format('d M Y H:i') }}
-                        </div>
+            @forelse ($todos as $date => $group)
+                {{-- Header tanggal --}}
+                <li class="list-group-item bg-gradient text-white fw-semibold d-flex align-items-center"
+                    style="background: linear-gradient(90deg, #6c757d, #495057); border-left: 5px solid #ffc107; font-size: 1.1rem;">
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <i class="bi bi-calendar-event-fill me-2"></i>
+                        {{ $date !== 'Tanpa Deadline'
+                            ? \Carbon\Carbon::parse($date)->locale('id')->isoFormat('dddd, D MMMM Y')
+                            : 'Tanpa Deadline' }}
                     </div>
-
-                    {{-- Status & Checkbox --}}
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="badge px-2 py-1 {{ $todo->TODOISDONE ? 'bg-success' : 'bg-danger' }}"
-                            style="font-size: 1rem;">
-                            {{ $todo->TODOISDONE ? 'Selesai' : 'Belum' }}
-                        </span>
-
-                        <input type="checkbox" disabled {{ $todo->TODOISDONE ? 'checked' : '' }}
-                            class="form-check-input mt-0"
-                            style="transform: scale(1.2); width: 1.2em; height: 1.2em; border: 2px solid rgba(255,255,255,0.4); border-radius: 4px; background-color: transparent;">
-                    </div>
+                    {{-- Status group --}}
+                    <span style="font-size: 1rem; margin-right: 3rem;">
+                        Status
+                    </span>
                 </li>
-            @endforeach
+
+                {{-- List todo per group --}}
+                @foreach ($group as $index => $todo)
+                    <li class="list-group-item d-flex justify-content-between align-items-center todo-row
+                        {{ $index % 2 === 0 ? 'striped' : '' }}"
+                        style="background-color: #23272b; color: #f8f9fa; border: 1px solid #343a40;">
+
+                        {{-- Keterangan todo --}}
+                        <div>
+                            <strong>{{ $todo->TODODESC }}</strong>
+
+                            <div class="small" style="color: #ccc;">
+                                Deadline:
+                                {{ $todo->TODODEADLINEDATE
+                                    ? \Carbon\Carbon::parse($todo->TODODEADLINEDATE)->locale('id')->isoFormat('D MMMM Y HH:mm')
+                                    : '-' }}
+                            </div>
+
+                            <div class="small" style="color: #ccc;">
+                                Selesai:
+                                {{ $todo->TODOFINISHTIMESTAMP
+                                    ? \Carbon\Carbon::parse($todo->TODOFINISHTIMESTAMP)->locale('id')->isoFormat('D MMMM Y HH:mm')
+                                    : '-' }}
+                            </div>
+
+                            <div class="small" style="color: #ccc;">
+                                Dibuat:
+                                {{ \Carbon\Carbon::parse($todo->created_at)->locale('id')->isoFormat('D MMMM Y HH:mm') }}
+                            </div>
+                        </div>
+
+                        {{-- Status & Checkbox --}}
+                        <div class="d-flex align-items-center gap-3">
+                            <span class="badge px-2 py-1 {{ $todo->TODOISDONE ? 'bg-success' : 'bg-danger' }}"
+                                style="font-size: 1rem;">
+                                {{ $todo->TODOISDONE ? 'Selesai' : 'Belum' }}
+                            </span>
+
+                            <input type="checkbox" disabled {{ $todo->TODOISDONE ? 'checked' : '' }}
+                                class="form-check-input mt-0"
+                                style="transform: scale(1.2); width: 1.2em; height: 1.2em; border: 2px solid rgba(255,255,255,0.4); border-radius: 4px; background-color: transparent;">
+                        </div>
+                    </li>
+                @endforeach
+            @empty
+                <li class="list-group-item text-center text-muted">Belum ada todo.</li>
+            @endforelse
         </ul>
     @endif
+
 
     <!-- Modal Create Todo -->
     <div class="modal fade" id="createTodoModal" tabindex="-1" aria-labelledby="createTodoModalLabel" aria-hidden="true">
@@ -187,7 +216,4 @@ document.head.insertAdjacentHTML('beforeend', `
 </script>
 
 @endpush
-
-
-
 @endsection
