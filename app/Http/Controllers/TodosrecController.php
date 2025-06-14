@@ -29,6 +29,10 @@ class TodosrecController extends Controller
             $todo->formatted_created = $todo->created_at
                 ? Carbon::parse($todo->created_at)->locale('id')->isoFormat('D MMMM Y HH:mm')
                 : '-';
+            
+            $todo->flatpickr_deadline = $todo->TODODEADLINEDATE
+                ? Carbon::parse($todo->TODODEADLINEDATE)->format('Y-m-d H:i')
+                : '';
 
             return $todo;
         });
@@ -44,6 +48,17 @@ class TodosrecController extends Controller
             'todos' => $groupedTodos
         ]);
     }
+
+    public function toggle($id)
+    {
+        $todo = Todosrec::findOrFail($id);
+        $todo->TODOISDONE = !$todo->TODOISDONE;
+        $todo->TODOFINISHTIMESTAMP = $todo->TODOISDONE ? now() : null;
+        $todo->save();
+
+        return redirect()->back()->with('success', 'Status todo diperbarui.');
+    }
+
 
 
 
@@ -96,10 +111,21 @@ class TodosrecController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+   public function update(Request $request, string $id)
     {
-        //
+        $validatedData = $request->validate([
+            'TODODESC' => 'required|string|max:255',
+            'TODODEADLINEDATE' => 'nullable|date',
+        ]);
+
+        $todo = Todosrec::findOrFail($id);
+        $todo->TODODESC = $validatedData['TODODESC'];
+        $todo->TODODEADLINEDATE = $validatedData['TODODEADLINEDATE'];
+        $todo->save();
+
+        return redirect()->route('todos.index')->with('success', 'Todo berhasil diperbarui!');
     }
+
 
     /**
      * Remove the specified resource from storage.
