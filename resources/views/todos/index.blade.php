@@ -23,12 +23,9 @@
                 <li class="list-group-item bg-gradient text-white fw-semibold d-flex align-items-center"
                     style="background: linear-gradient(90deg, #6c757d, #495057); border-left: 5px solid #ffc107; font-size: 1.1rem;">
                     <div class="d-flex align-items-center flex-grow-1">
-                        <i class="bi bi-calendar-event-fill me-2"></i>
-                        {{ $date !== 'Tanpa Deadline'
-                            ? \Carbon\Carbon::parse($date)->locale('id')->isoFormat('dddd, D MMMM Y')
-                            : 'Tanpa Deadline' }}
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        {{ $date }}
                     </div>
-                    {{-- Status group --}}
                     <span style="font-size: 1rem; margin-right: 3rem;">
                         Status
                     </span>
@@ -41,26 +38,19 @@
                         style="background-color: #23272b; color: #f8f9fa; border: 1px solid #343a40;">
 
                         {{-- Keterangan todo --}}
-                        <div>
+                        <div style="margin-left: 0.9rem;">
                             <strong>{{ $todo->TODODESC }}</strong>
 
                             <div class="small" style="color: #ccc;">
-                                Deadline:
-                                {{ $todo->TODODEADLINEDATE
-                                    ? \Carbon\Carbon::parse($todo->TODODEADLINEDATE)->locale('id')->isoFormat('D MMMM Y HH:mm')
-                                    : '-' }}
+                                Deadline: {{ $todo->formatted_deadline }}
                             </div>
 
                             <div class="small" style="color: #ccc;">
-                                Selesai:
-                                {{ $todo->TODOFINISHTIMESTAMP
-                                    ? \Carbon\Carbon::parse($todo->TODOFINISHTIMESTAMP)->locale('id')->isoFormat('D MMMM Y HH:mm')
-                                    : '-' }}
+                                Selesai: {{ $todo->formatted_finish }}
                             </div>
 
                             <div class="small" style="color: #ccc;">
-                                Dibuat:
-                                {{ \Carbon\Carbon::parse($todo->created_at)->locale('id')->isoFormat('D MMMM Y HH:mm') }}
+                                Dibuat: {{ $todo->formatted_created }}
                             </div>
                         </div>
 
@@ -82,6 +72,7 @@
             @endforelse
         </ul>
     @endif
+
 
 
     <!-- Modal Create Todo -->

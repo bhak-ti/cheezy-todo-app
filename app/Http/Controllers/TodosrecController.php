@@ -14,16 +14,37 @@ class TodosrecController extends Controller
 
     public function index()
     {
-        $todos = Todosrec::orderBy('TODODEADLINEDATE')
-            ->get()
-            ->groupBy(function ($item) {
-                return $item->TODODEADLINEDATE
-                    ? Carbon::parse($item->TODODEADLINEDATE)->format('Y-m-d')
-                    : 'Tanpa Deadline';
-            });
+        $todos = Todosrec::orderBy('TODODEADLINEDATE')->get();
 
-        return view('todos.index', compact('todos'));
+        // Format data untuk view
+        $todos->transform(function ($todo) {
+            $todo->formatted_deadline = $todo->TODODEADLINEDATE
+                ? Carbon::parse($todo->TODODEADLINEDATE)->locale('id')->isoFormat('D MMMM Y HH:mm')
+                : '-';
+
+            $todo->formatted_finish = $todo->TODOFINISHTIMESTAMP
+                ? Carbon::parse($todo->TODOFINISHTIMESTAMP)->locale('id')->isoFormat('D MMMM Y HH:mm')
+                : '-';
+
+            $todo->formatted_created = $todo->created_at
+                ? Carbon::parse($todo->created_at)->locale('id')->isoFormat('D MMMM Y HH:mm')
+                : '-';
+
+            return $todo;
+        });
+
+        // Group berdasarkan tanggal deadline (yang diformat untuk key tampilan)
+        $groupedTodos = $todos->groupBy(function ($item) {
+            return $item->TODODEADLINEDATE
+                ? Carbon::parse($item->TODODEADLINEDATE)->locale('id')->isoFormat('dddd, D MMMM Y')
+                : 'Tanpa Deadline';
+        });
+
+        return view('todos.index', [
+            'todos' => $groupedTodos
+        ]);
     }
+
 
 
     /**
